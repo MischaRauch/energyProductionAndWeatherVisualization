@@ -34,7 +34,7 @@ function MapComponent({onSelectPlant, selectedPlant, children, plantsArray, onHo
     patricleSpeedFactor: 5,
     imageSmoothing: 5,
     // raster layer
-    rasterOpacity: 0.1,
+    rasterOpacity: 0.5,
     // common properties for all layers
     extensions: [new ClipExtension()],
     clipBounds: [-181, -85.051129, 181, 85.051129],
@@ -81,9 +81,14 @@ function MapComponent({onSelectPlant, selectedPlant, children, plantsArray, onHo
 
       const rebaseWindImage = await WeatherLayers.loadTextureData('./assets/weather-images/20211125_wind.png');
 
+      const rebaseTempImage = await WeatherLayers.loadTextureData(
+        "./assets/weather-images/20211125_temp.png"
+      );
+
       const deckOverlay = new MapboxOverlay({
         interleaved: true,
         layers: [
+<<<<<<< Updated upstream
           new WeatherLayers.ParticleLayer({
             id: 'particle',
             // data properties
@@ -104,18 +109,45 @@ function MapComponent({onSelectPlant, selectedPlant, children, plantsArray, onHo
           }),
           // new WeatherLayers.RasterLayer({
           //   id: 'raster',
+=======
+          // new WeatherLayers.ParticleLayer({
+          //   id: "particle",
+>>>>>>> Stashed changes
           //   // data properties
-          //   image,
-          //   image2,
-          //   imageWeight,
-          //   imageType,
-          //   imageUnscale,
-          //   bounds,
-          //   // style properties
-          //   palette,
-          //   opacity: WLConfig.rasterOpacity,
+          //   image: rebaseWindImage,
+          //   // image2,
+          //   //imageWeight,
+          //   // imageType: "VECTOR",
+          //   imageUnscale: WLConfig.imageUnscale,
+          //   bounds: [-180, -90, 180, 90],
+          //   width: WLConfig.particleWidth,
+          //   maxAge: WLConfig.particleMaxAge,
+          //   palette: WLConfig.particlePalette,
+          //   opacity: WLConfig.particleOpacity,
+          //   speedFactor: WLConfig.patricleSpeedFactor,
           //   extensions: WLConfig.extensions,
           //   clipBounds: WLConfig.clipBounds,
+          //   imageSmoothing: WLConfig.imageSmoothing,
+          // }),
+          new WeatherLayers.RasterLayer({
+            id: "raster",
+            // data properties
+            image: rebaseTempImage,
+            // imageUnscale: WLConfig.imageUnscale,
+            palette: WLConfig.particlePalette,
+            opacity: WLConfig.rasterOpacity,
+            extensions: WLConfig.extensions,
+            clipBounds: WLConfig.clipBounds,
+          }),
+
+          // new WeatherLayers.HighLowLayer({
+          //   id: "highLow",
+          //   // data properties
+          //   image: rebaseTempImage,
+          //   imageUnscale: WLConfig.imageUnscale,
+          //   bounds: [-180, -90, 180, 90],
+          //   // style properties
+          //   radius: 1000, // km
           // }),
         ],
       });
