@@ -41,12 +41,12 @@ export default function Map() {
   const [selectedDate, setSelectedDate] = useState(new Date("2021-11-25"));
   const [plantsArray, setPlants] = useState([]);
   const [hoverInfo, setHoverInfo] = useState(undefined);
-  const [selectedGraphs, setSelectedGraphs] = useState(["ws", "ice"]);
+  const [selectedGraphs, setSelectedGraphs] = useState(["Windspeed", "Ice loss"]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentSwitchOption, setCurrentSwitchOption] = useState('Energy Production');
   const [selectedLayer, setSelectedLayer] = useState(["WindSpeed"]);
 
-  const graphTypes = ["ws", "hum", "temp", "ice"];
+  const graphTypes = ["Windspeed", "Humidity", "Temperature", "Ice loss"];
 
   const handleSwitchChange = (option) => {
     setCurrentSwitchOption(option);
@@ -85,7 +85,12 @@ export default function Map() {
     });
   };
 
-  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+  const toggleDropdown = () =>  {
+    setIsDropdownOpen(!isDropdownOpen);
+    setButtonClass(!isDropdownOpen ? 'bg-lightgray' : ''); // Add your desired class
+  }
+
+  const [buttonClass, setButtonClass] = useState('');
 
   const [searchInput, setSearchInput] = useState("");
   const [filteredPlantsArray, setFilteredPlantsArray] = useState(plantsArray);
@@ -164,21 +169,25 @@ export default function Map() {
               <div className="flex justify-between items-center w-full">
                 <p>DETAIL VIEW</p>
                 <button className="mr-4" onClick={handleClickClose}>
-                  CLOSE
+                  X
                 </button>
               </div>
 
               <div className="flex justify-between items-center w-full">
                 <h1 className="font-blue text-none">{selectedPlant.name}</h1>
-                <div className="relative mr-4">
+                <div className="relative mr-4 flex flex-col items-end">
                   <button
                     onClick={toggleDropdown}
-                    className="px-4 py-2 bg-gray-200"
+                    className={`px-4 py-2 bg-gray-200 flex items-center lightgray-hover px-2 rounded-md py-2 z-50 ${buttonClass}`}
                   >
-                    Graph Types
+                    <span className="mr-2">Graph Types</span>
+                    <img
+                      src="/assets/icons/arrow-w.svg"  // Replace with the actual path to your PNG icon
+                      alt="Dropdown Indicator"
+                    />                  
                   </button>
                   {isDropdownOpen && (
-                    <div className="absolute mt-1 w-48 bg-dark shadow-md z-10 p-3">
+                    <div className="absolute mt-30px w-full bg-lightgray shadow-md z-10 p-3 background-effect bottom-border">
                       {graphTypes.map((type) => (
                         <div key={type} className="flex items-center">
                           <input
@@ -188,16 +197,17 @@ export default function Map() {
                             onChange={() => handleGraphSelection(type)}
                             className="mr-2"
                           />
-                          <label htmlFor={type}>{type.toUpperCase()}</label>
+                          <label htmlFor={type}>{type}</label>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
+
               </div>
 
               <div className="mb-8">
-                {selectedGraphs.includes("ice") && (
+                {selectedGraphs.includes("Ice loss") && (
                   <GraphIcelossComponenet
                     energyData={energyData}
                     icelossData={icelossData}
@@ -209,7 +219,7 @@ export default function Map() {
                 )}
               </div>
               <div>
-                {selectedGraphs.includes("ws") && (
+                {selectedGraphs.includes("Windspeed") && (
                   <GraphComponent
                     graphValues={windData}
                     chartTitle="Windspeed"
@@ -220,7 +230,7 @@ export default function Map() {
                 )}
               </div>
               <div>
-                {selectedGraphs.includes("hum") && (
+                {selectedGraphs.includes("Humidity") && (
                   <GraphComponent
                     graphValues={windData}
                     chartTitle="Humidity"
@@ -231,7 +241,7 @@ export default function Map() {
                 )}
               </div>
               <div>
-                {selectedGraphs.includes("temp") && (
+                {selectedGraphs.includes("Temperature") && (
                   <GraphComponent
                     graphValues={windData}
                     chartTitle="Temperature"
